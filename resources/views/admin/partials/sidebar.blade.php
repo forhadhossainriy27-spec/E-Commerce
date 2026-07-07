@@ -1,0 +1,1 @@
+class="{{ request()->routeIs('admin.dashboard') ? 'bg-blue-600 text-white' : '' }}"

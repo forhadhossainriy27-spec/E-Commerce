@@ -24,6 +24,9 @@ class User extends Authenticatable
         'role',
     ];
 
+    const CUSTOMER = 0;
+    const ADMIN = 1;
+    
     /**
      * Get the attributes that should be cast.
      *
