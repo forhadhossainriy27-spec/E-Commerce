@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
 
+            // Relationships
             $table->foreignId('category_id')
                 ->constrained()
                 ->cascadeOnDelete();
@@ -23,23 +24,52 @@ return new class extends Migration
                 ->constrained()
                 ->nullOnDelete();
 
+            // Product Info
             $table->string('name');
             $table->string('slug')->unique();
+            $table->string('sku')->unique();
 
+            // Description
             $table->text('short_description')->nullable();
             $table->longText('description');
 
-            $table->decimal('price', 10, 2);
+            // Pricing
+            $table->decimal('cost_price', 10, 2)->default(0);
+            $table->decimal('selling_price', 10, 2);
             $table->decimal('discount_price', 10, 2)->nullable();
 
-            $table->integer('stock')->default(0);
+            $table->decimal('weight', 10, 3)->nullable();
+            $table->enum('unit', [
+                'pcs',
+                'kg',
+                'g',
+                'ltr',
+                'ml',
+                'box',
+                'pack'
+            ])->default('pcs');
+            $table->boolean('track_quantity')->default(true);
 
+            // Inventory
+            $table->unsignedInteger('stock')->default(0);
+            $table->unsignedInteger('minimum_stock')->default(5);
+
+            // Image
             $table->string('thumbnail')->nullable();
 
+            // SEO
+            $table->string('meta_title')->nullable();
+            $table->text('meta_description')->nullable();
+
+            // Status
             $table->boolean('featured')->default(false);
             $table->boolean('status')->default(true);
 
+            $table->unsignedInteger('view_count')->default(0);
+            $table->unsignedInteger('sort_order')->default(0);
+
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
